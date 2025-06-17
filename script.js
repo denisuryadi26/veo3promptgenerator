@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     backsound: document.getElementById('backsound'),
     kalimat: document.getElementById('kalimat'),
     detail: document.getElementById('detail'),
+    negative: document.getElementById('negative'),
   };
 
   // --- STATE MANAGEMENT ---
@@ -242,6 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `kalimat diucapkan dalam Bahasa Indonesia: "${inputs.kalimat.value.trim()}"`
         : '',
       inputs.detail.value,
+      inputs.detail.value,
+      inputs.negative.value ? `tidak ${inputs.negative.value}` : '',
     ];
 
     return promptParts.filter((part) => part && part.trim()).join(', ');

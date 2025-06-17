@@ -130,17 +130,29 @@
                 <div>
                     <label for="kamera" class="block mb-2 text-sm font-medium text-gray-300">Gerakan Kamera</label>
                     <select id="kamera" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5">
-                        <option selected value="">Pilih gerakan kamera...</option>
-                        <option value="Static shot">Static Shot</option>
-                        <option value="Pan">Pan</option>
-                        <option value="Tilt">Tilt</option>
-                        <option value="Dolly shot">Dolly Shot</option>
-                        <option value="Tracking shot">Tracking Shot</option>
-                        <option value="Handheld">Handheld</option>
-                        <option value="Steadicam">Steadicam</option>
-                        <option value="Crane shot">Crane Shot</option>
-                        <option value="Aerial shot">Aerial/Drone Shot</option>
-                        <option value="Dolly zoom">Dolly Zoom (Vertigo Effect)</option>
+                        <option selected value="">Pilih Gerakan Kamera</option>
+                        <option value="Pan (Geser Horizontal)">Pan (Geser Horizontal)</option>
+                        <option value="Tilt (Miring Vertikal)">Tilt (Miring Vertikal)</option>
+                        <option value="Dolly (Maju/Mundur di atas rel)">Dolly (Maju/Mundur di atas rel)</option>
+                        <option value="Zoom In/Out (Perbesar/Perkecil)">Zoom In/Out (Perbesar/Perkecil)</option>
+                        <option value="Tracking Shot (Mengikuti Subjek)">Tracking Shot (Mengikuti Subjek)</option>
+                        <option value="Crane Shot (Angkat Derek)">Crane Shot (Angkat Derek)</option>
+                        <option value="Handheld (Genggam)">Handheld (Genggam)</option>
+                        <option value="Static (Diam/Statis)">Static (Diam/Statis)</option>
+                        <option value="Orbit (Mengelilingi Subjek)">Orbit (Mengelilingi Subjek)</option>
+                        <option value="Arc (Gerakan Busur)">Arc (Gerakan Busur)</option>
+                        <option value="Spiral (Gerakan Spiral)">Spiral (Gerakan Spiral)</option>
+                        <option value="Push In (Dorong Masuk)">Push In (Dorong Masuk)</option>
+                        <option value="Pull Out (Tarik Keluar)">Pull Out (Tarik Keluar)</option>
+                        <option value="Roll (Berguling)">Roll (Berguling)</option>
+                        <option value="3D Rotation (Rotasi 3D)">3D Rotation (Rotasi 3D)</option>
+                        <option value="POV (Sudut Pandang Subjek)">POV (Sudut Pandang Subjek)</option>
+                        <option value="Fly Through (Terbang Melewati)">Fly Through (Terbang Melewati)</option>
+                        <option value="Time-lapse (Selang Waktu)">Time-lapse (Selang Waktu)</option>
+                        <option value="Slow Motion (Gerak Lambat)">Slow Motion (Gerak Lambat)</option>
+                        <option value="Fast Motion (Gerak Cepat)">Fast Motion (Gerak Cepat)</option>
+                        <option value="Reverse Zoom (Zoom Terbalik)">Reverse Zoom (Zoom Terbalik)</option>
+                        <option value="Gimbal (Stabilisasi Gimbal)">Gimbal (Stabilisasi Gimbal)</option>
                     </select>
                 </div>
 
@@ -209,8 +221,14 @@
                 </div>
 
                 <div>
-                    <label for="detail" class="block mb-2 text-sm font-medium text-gray-300">Detail Tambahan</label>
+                    <label for="detail" class="block mb-2 text-sm font-medium text-gray-300">Detail Tambahan (spesifik atau preferensi)</label>
                     <input type="text" id="detail" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: hyperrealistic, fokus detail">
+                </div>
+
+                <!-- NEW: Negative Prompt Section -->
+                <div>
+                    <label for="negative" class="form-label">Negative Prompt (Yang dihindari)</label>
+                    <input type="text" id="negative" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: kartun, blur, kualitas rendah, teks, watermark, deformed hands, transition">
                 </div>
                  <button id="generateBtn" class="w-full mt-4 text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">
                     Generate Prompt
