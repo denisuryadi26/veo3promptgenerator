@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : '',
       inputs.detail.value,
       inputs.detail.value,
-      inputs.negative.value ? `tidak ${inputs.negative.value}` : '',
+      inputs.negative.value ? `Hindari : ${inputs.negative.value}` : '',
     ];
 
     return promptParts.filter((part) => part && part.trim()).join(', ');
