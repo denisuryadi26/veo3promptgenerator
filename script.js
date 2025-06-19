@@ -564,7 +564,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `kalimat diucapkan dalam Bahasa Indonesia: "${inputs.kalimat.value.trim()}"`
         : '',
       inputs.detail.value,
-      inputs.detail.value,
       inputs.negative.value ? `Hindari : ${inputs.negative.value}` : '',
     ];
 
