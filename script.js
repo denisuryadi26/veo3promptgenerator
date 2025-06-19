@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Re-enable the button immediately
       addCoinBtn.disabled = false;
       addCoinBtn.title = 'Tambah 5 Koin';
-      addCoinBtn.textContent = '+';
+      addCoinBtn.textContent = '+ Tambah Koin';
 
       if (timeElapsed >= requiredTime) {
         // Grant coins only if enough time has passed
