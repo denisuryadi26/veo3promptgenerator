@@ -23,6 +23,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const imageUploadIcon = document.getElementById('imageUploadIcon');
   const imageUploadContainer = document.getElementById('imageUploadContainer');
 
+  // -- SIMPAN KARAKTER --
+  const saveCharacterBtn = document.getElementById('saveCharacterBtn');
+  const loadCharacterBtn = document.getElementById('loadCharacterBtn'); // New Modal Elements
+
+  const saveCharacterModal = document.getElementById('saveCharacterModal');
+  const closeSaveModalBtn = document.getElementById('closeSaveModalBtn');
+  const characterNameInput = document.getElementById('characterNameInput');
+  const confirmSaveCharacterBtn = document.getElementById(
+    'confirmSaveCharacterBtn',
+  );
+
+  const loadCharacterModal = document.getElementById('loadCharacterModal');
+  const closeLoadModalBtn = document.getElementById('closeLoadModalBtn');
+  const characterList = document.getElementById('characterList');
+  const noCharactersMessage = document.getElementById('noCharactersMessage');
+  const clearAllCharactersBtn = document.getElementById(
+    'clearAllCharactersBtn',
+  );
+
+  // -- SIMPAN TEMPAT --
+  const savePlaceBtn = document.getElementById('savePlaceBtn');
+  const loadPlaceBtn = document.getElementById('loadPlaceBtn'); // New Modal Elements
+
+  const savePlaceModal = document.getElementById('savePlaceModal');
+  const closeSaveModalPlaceBtn = document.getElementById(
+    'closeSaveModalPlaceBtn',
+  );
+  const placeNameInput = document.getElementById('placeNameInput');
+  const confirmSavePlaceBtn = document.getElementById('confirmSavePlaceBtn');
+
+  const loadPlaceModal = document.getElementById('loadPlaceModal');
+  const closeLoadModalPlaceBtn = document.getElementById(
+    'closeLoadModalPlaceBtn',
+  );
+  const placeList = document.getElementById('placeList');
+  const noPlacesMessage = document.getElementById('noPlacesMessage');
+  const clearAllPlacesBtn = document.getElementById('clearAllPlacesBtn');
+
   const inputs = {
     subjek: document.getElementById('subjek'),
     aksi: document.getElementById('aksi'),
@@ -91,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // MODIFIED: Added timer logic
     if (isWaitingForAdReward && adOpenedTime) {
       const timeElapsed = Date.now() - adOpenedTime;
-      const requiredTime = 5000; // 5 seconds in milliseconds
+      const requiredTime = 2000; // 2 seconds in milliseconds
 
       // Reset state immediately to prevent multiple triggers
       isWaitingForAdReward = false;
@@ -105,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (timeElapsed >= requiredTime) {
         // Grant coins only if enough time has passed
         coins += 5;
+        console.log('Coins added!');
         saveCoins();
         updateCoinDisplay();
 
@@ -123,6 +162,288 @@ document.addEventListener('DOMContentLoaded', () => {
         // A custom notification could be added here for better UX.
         console.log('Returned too quickly, no coins awarded.');
       }
+    }
+  }
+
+  // --- Saved Characters Management ---
+  const LOCAL_STORAGE_SAVED_CHARACTERS_KEY = 'veoPromptSavedCharacters';
+  let savedCharacters = []; // Will hold an array of { name: string, value: string }
+
+  function loadSavedCharacters() {
+    const data = localStorage.getItem(LOCAL_STORAGE_SAVED_CHARACTERS_KEY);
+    try {
+      savedCharacters = data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error('Failed to parse saved characters from localStorage:', e);
+      savedCharacters = []; // Reset on error
+    }
+  }
+
+  function saveCharactersToLocalStorage() {
+    localStorage.setItem(
+      LOCAL_STORAGE_SAVED_CHARACTERS_KEY,
+      JSON.stringify(savedCharacters),
+    );
+  }
+
+  // --- Save Character Modal Functions ---
+  function openSaveCharacterModal() {
+    if (!inputs.subjek.value.trim()) {
+      alert('Kolom Subjek kosong. Isi dulu sebelum menyimpan karakter.');
+      return;
+    }
+    characterNameInput.value = ''; // Clear previous input
+    saveCharacterModal.classList.remove('hidden');
+    characterNameInput.focus(); // Focus on the input field
+  }
+
+  function closeSaveCharacterModal() {
+    saveCharacterModal.classList.add('hidden');
+  }
+
+  function handleSaveCharacter() {
+    const characterName = characterNameInput.value.trim();
+    const characterValue = inputs.subjek.value.trim();
+
+    if (!characterName) {
+      alert('Nama karakter tidak boleh kosong!');
+      return;
+    }
+
+    if (!characterValue) {
+      alert('Kolom subjek kosong, tidak ada yang disimpan.');
+      return;
+    } // Check if character name already exists
+
+    const existingIndex = savedCharacters.findIndex(
+      (char) => char.name.toLowerCase() === characterName.toLowerCase(),
+    );
+    if (existingIndex > -1) {
+      if (
+        !confirm(`Karakter dengan nama "${characterName}" sudah ada. Timpa?`)
+      ) {
+        return;
+      }
+      savedCharacters[existingIndex].value = characterValue; // Overwrite
+    } else {
+      savedCharacters.push({ name: characterName, value: characterValue });
+    }
+
+    saveCharactersToLocalStorage();
+    showCopyFeedback(confirmSaveCharacterBtn, 'Tersimpan!'); // Feedback on save button
+    setTimeout(closeSaveCharacterModal, 1000); // Close after a short delay
+  }
+
+  // --- Load Character Modal Functions ---
+  function openLoadCharacterModal() {
+    renderCharacterList();
+    loadCharacterModal.classList.remove('hidden');
+  }
+
+  function closeLoadCharacterModal() {
+    loadCharacterModal.classList.add('hidden');
+  }
+
+  function renderCharacterList() {
+    characterList.innerHTML = ''; // Clear existing list
+    if (savedCharacters.length === 0) {
+      noCharactersMessage.classList.remove('hidden');
+      clearAllCharactersBtn.classList.add('hidden');
+    } else {
+      noCharactersMessage.classList.add('hidden');
+      clearAllCharactersBtn.classList.remove('hidden');
+      savedCharacters.forEach((char, index) => {
+        const listItem = document.createElement('li');
+        listItem.className =
+          'flex items-center justify-between bg-gray-700/70 p-3 rounded-lg border border-gray-600';
+        listItem.innerHTML = `
+          <span class="font-medium text-white flex-1 truncate">${char.name}</span>
+          <div class="flex space-x-2 pl-2">
+            <button data-index="${index}" class="load-char-btn bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors">Muat</button>
+            <button data-index="${index}" class="delete-char-btn bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors">Hapus</button>
+          </div>
+        `;
+        characterList.appendChild(listItem);
+      }); // Add event listeners to dynamically created buttons
+
+      characterList.querySelectorAll('.load-char-btn').forEach((button) => {
+        button.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          inputs.subjek.value = savedCharacters[index].value;
+          closeLoadCharacterModal();
+          showCopyFeedback(
+            loadCharacterBtn,
+            `"${savedCharacters[index].name}" dimuat!`,
+          ); // Feedback for main load button
+        });
+      });
+
+      characterList.querySelectorAll('.delete-char-btn').forEach((button) => {
+        button.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          if (
+            confirm(
+              `Apakah Anda yakin ingin menghapus karakter "${savedCharacters[index].name}"?`,
+            )
+          ) {
+            savedCharacters.splice(index, 1); // Remove from array
+            saveCharactersToLocalStorage();
+            renderCharacterList(); // Re-render the list
+            alert('Karakter dihapus!');
+          }
+        });
+      });
+    }
+  }
+
+  function clearAllSavedCharacters() {
+    if (
+      confirm('Apakah Anda yakin ingin menghapus SEMUA karakter yang disimpan?')
+    ) {
+      savedCharacters = [];
+      saveCharactersToLocalStorage();
+      renderCharacterList(); // Re-render the list (will show "No characters" message)
+      alert('Semua karakter dihapus!');
+    }
+  }
+
+  // --- Saved Place Management ---
+  const LOCAL_STORAGE_SAVED_PLACES_KEY = 'veoPromptSavedPlaces';
+  let savedPlaces = []; // Will hold an array of { name: string, value: string }
+
+  function loadSavedPlaces() {
+    const data = localStorage.getItem(LOCAL_STORAGE_SAVED_PLACES_KEY);
+    try {
+      savedPlaces = data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error('Failed to parse saved places from localStorage:', e);
+      savedPlaces = []; // Reset on error
+    }
+  }
+
+  function savePlacesToLocalStorage() {
+    localStorage.setItem(
+      LOCAL_STORAGE_SAVED_PLACES_KEY,
+      JSON.stringify(savedPlaces),
+    );
+  }
+
+  // --- Save Place Modal Functions ---
+  function openSavePlaceModal() {
+    if (!inputs.tempat.value.trim()) {
+      alert('Kolom Tempat kosong. Isi dulu sebelum menyimpan tempat.');
+      return;
+    }
+    placeNameInput.value = ''; // Clear previous input
+    savePlaceModal.classList.remove('hidden');
+    placeNameInput.focus(); // Focus on the input field
+  }
+
+  function closeSavePlaceModal() {
+    savePlaceModal.classList.add('hidden');
+  }
+
+  function handleSavePlace() {
+    const placeName = placeNameInput.value.trim();
+    const placeValue = inputs.tempat.value.trim();
+
+    if (!placeName) {
+      alert('Nama tempat tidak boleh kosong!');
+      return;
+    }
+
+    if (!placeValue) {
+      alert('Kolom tempat kosong, tidak ada yang disimpan.');
+      return;
+    } // Check if place name already exists
+
+    const existingIndex = savedPlaces.findIndex(
+      (char) => char.name.toLowerCase() === placeName.toLowerCase(),
+    );
+    if (existingIndex > -1) {
+      if (!confirm(`Tempat dengan nama "${placeName}" sudah ada. Timpa?`)) {
+        return;
+      }
+      savedPlaces[existingIndex].value = placeValue; // Overwrite
+    } else {
+      savedPlaces.push({ name: placeName, value: placeValue });
+    }
+
+    savePlacesToLocalStorage();
+    showCopyFeedback(confirmSavePlaceBtn, 'Tersimpan!'); // Feedback on save button
+    setTimeout(closeSavePlaceModal, 1000); // Close after a short delay
+  }
+
+  // --- Load Place Modal Functions ---
+  function openLoadPlaceModal() {
+    renderPlaceList();
+    loadPlaceModal.classList.remove('hidden');
+  }
+
+  function closeLoadPlaceModal() {
+    loadPlaceModal.classList.add('hidden');
+  }
+
+  function renderPlaceList() {
+    placeList.innerHTML = ''; // Clear existing list
+    if (savedPlaces.length === 0) {
+      noPlacesMessage.classList.remove('hidden');
+      clearAllPlacesBtn.classList.add('hidden');
+    } else {
+      noPlacesMessage.classList.add('hidden');
+      clearAllPlacesBtn.classList.remove('hidden');
+      savedPlaces.forEach((place, index) => {
+        const listItem = document.createElement('li');
+        listItem.className =
+          'flex items-center justify-between bg-gray-700/70 p-3 rounded-lg border border-gray-600';
+        listItem.innerHTML = `
+          <span class="font-medium text-white flex-1 truncate">${place.name}</span>
+          <div class="flex space-x-2 pl-2">
+            <button data-index="${index}" class="load-place-btn bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors">Muat</button>
+            <button data-index="${index}" class="delete-place-btn bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors">Hapus</button>
+          </div>
+        `;
+        placeList.appendChild(listItem);
+      }); // Add event listeners to dynamically created buttons
+
+      placeList.querySelectorAll('.load-place-btn').forEach((button) => {
+        button.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          inputs.tempat.value = savedPlaces[index].value;
+          closeLoadPlaceModal();
+          showCopyFeedback(
+            loadPlaceBtn,
+            `"${savedPlaces[index].name}" dimuat!`,
+          ); // Feedback for main load button
+        });
+      });
+
+      placeList.querySelectorAll('.delete-place-btn').forEach((button) => {
+        button.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          if (
+            confirm(
+              `Apakah Anda yakin ingin menghapus tempat "${savedPlaces[index].name}"?`,
+            )
+          ) {
+            savedPlaces.splice(index, 1); // Remove from array
+            savePlacesToLocalStorage();
+            renderPlaceList(); // Re-render the list
+            alert('Tempat dihapus!');
+          }
+        });
+      });
+    }
+  }
+
+  function clearAllSavedPlaces() {
+    if (
+      confirm('Apakah Anda yakin ingin menghapus SEMUA tempat yang disimpan?')
+    ) {
+      savedPlaces = [];
+      savePlacesToLocalStorage();
+      renderPlaceList(); // Re-render the list (will show "No places" message)
+      alert('Semua tempat dihapus!');
     }
   }
 
@@ -447,6 +768,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- EVENT LISTENERS INITIALIZATION ---
   loadCoins();
+  loadSavedCharacters(); // NEW: Load characters when the page loads
+  loadSavedPlaces(); // NEW: Load places when the page loads
 
   addCoinBtn.addEventListener('click', handleAddCoinClick);
   window.addEventListener('focus', handleWindowFocus);
@@ -485,7 +808,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Drag and Drop for Image Upload
+  // NEW: Event Listeners for Character Save/Load/Delete
+
+  saveCharacterBtn.addEventListener('click', openSaveCharacterModal);
+  closeSaveModalBtn.addEventListener('click', closeSaveCharacterModal);
+  confirmSaveCharacterBtn.addEventListener('click', handleSaveCharacter);
+  saveCharacterModal.addEventListener('click', (e) => {
+    if (e.target === saveCharacterModal) {
+      closeSaveCharacterModal();
+    }
+  });
+
+  loadCharacterBtn.addEventListener('click', openLoadCharacterModal);
+  closeLoadModalBtn.addEventListener('click', closeLoadCharacterModal);
+  loadCharacterModal.addEventListener('click', (e) => {
+    if (e.target === loadCharacterModal) {
+      closeLoadCharacterModal();
+    }
+  });
+
+  clearAllCharactersBtn.addEventListener('click', clearAllSavedCharacters); // Drag and Drop for Image Upload
+
+  // NEW: Event Listeners for Place Save/Load/Delete
+  savePlaceBtn.addEventListener('click', openSavePlaceModal);
+  closeSaveModalPlaceBtn.addEventListener('click', closeSavePlaceModal);
+  confirmSavePlaceBtn.addEventListener('click', handleSavePlace);
+  savePlaceModal.addEventListener('click', (e) => {
+    if (e.target === savePlaceModal) {
+      closeSavePlaceModal();
+    }
+  });
+
+  loadPlaceBtn.addEventListener('click', openLoadPlaceModal);
+  closeLoadModalPlaceBtn.addEventListener('click', closeLoadPlaceModal);
+  loadPlaceModal.addEventListener('click', (e) => {
+    if (e.target === loadPlaceModal) {
+      closeLoadPlaceModal();
+    }
+  });
+
+  clearAllPlacesBtn.addEventListener('click', clearAllSavedPlaces); // Drag and Drop for Image Upload
+
   imageUploadContainer.addEventListener('dragover', (e) => {
     e.preventDefault();
     imageUploadContainer.parentElement.classList.add('border-indigo-500');

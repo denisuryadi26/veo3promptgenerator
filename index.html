@@ -75,9 +75,46 @@
                 </div>
                 <hr class="border-gray-700"/>
 
+                <h2 class="text-lg font-semibold text-white -mb-2">Isi Manual</h2>
                 <div>
                     <label for="subjek" class="block mb-2 text-sm font-medium text-gray-300">Subjek (Siapa/Apa)</label>
                     <input type="text" id="subjek" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: Seekor rubah oranye yang cerdas">
+                    <div class="flex space-x-2 mt-2">
+                        <button id="saveCharacterBtn" class="flex-1 text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                            Simpan Karakter
+                        </button>
+                        <button id="loadCharacterBtn" class="flex-1 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                            Muat Karakter
+                        </button>
+                    </div>
+                    <div id="saveCharacterModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 hidden">
+                        <div class="bg-gray-800 text-gray-300 rounded-lg shadow-2xl p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Simpan Karakter</h2>
+                                <button id="closeSaveModalBtn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+                            </div>
+                            <label for="characterNameInput" class="block mb-2 text-sm font-medium text-gray-300">Nama Karakter:</label>
+                            <input type="text" id="characterNameInput" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: Rubah Cerdas">
+                            <button id="confirmSaveCharacterBtn" class="w-full mt-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="loadCharacterModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 hidden">
+                        <div class="bg-gray-800 text-gray-300 rounded-lg shadow-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Muat & Hapus Karakter</h2>
+                                <button id="closeLoadModalBtn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+                            </div>
+                            <ul id="characterList" class="space-y-2">
+                                <li class="text-gray-500 text-center py-4" id="noCharactersMessage">Belum ada karakter yang disimpan.</li>
+                            </ul>
+                            <button id="clearAllCharactersBtn" class="w-full mt-4 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300 hidden">
+                                Hapus Semua Karakter
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -92,7 +129,44 @@
 
                 <div>
                     <label for="tempat" class="block mb-2 text-sm font-medium text-gray-300">Tempat (Latar Belakang)</label>
-                    <input type="text" id="tempat" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: di hutan lebat">
+                    <!-- <input type="text" id="tempat" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: di hutan lebat"> -->
+                     <input type="text" id="tempat" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: di hutan lebat">
+                    <div class="flex space-x-2 mt-2">
+                        <button id="savePlaceBtn" class="flex-1 text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                            Simpan Tempat
+                        </button>
+                        <button id="loadPlaceBtn" class="flex-1 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                            Muat Tempat
+                        </button>
+                    </div>
+                    <div id="savePlaceModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 hidden">
+                        <div class="bg-gray-800 text-gray-300 rounded-lg shadow-2xl p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Simpan Tempat</h2>
+                                <button id="closeSaveModalPlaceBtn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+                            </div>
+                            <label for="placeNameInput" class="block mb-2 text-sm font-medium text-gray-300">Nama Tempat:</label>
+                            <input type="text" id="placeNameInput" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: Rubah Cerdas">
+                            <button id="confirmSavePlaceBtn" class="w-full mt-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="loadPlaceModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 hidden">
+                        <div class="bg-gray-800 text-gray-300 rounded-lg shadow-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Muat & Hapus Tempat</h2>
+                                <button id="closeLoadModalPlaceBtn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+                            </div>
+                            <ul id="placeList" class="space-y-2">
+                                <li class="text-gray-500 text-center py-4" id="noPlacesMessage">Belum ada tempat yang disimpan.</li>
+                            </ul>
+                            <button id="clearAllPlacesBtn" class="w-full mt-4 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300 hidden">
+                                Hapus Semua Tempat
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                  <div>
