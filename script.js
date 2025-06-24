@@ -573,15 +573,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- GEMINI API INTEGRATION ---
   async function callGeminiAPI(instruction, imageData = null) {
-    // Get API key from configuration
-    const apiKey = window.APP_CONFIG?.GEMINI_API_KEY;
-    const model = window.APP_CONFIG?.GEMINI_MODEL || 'gemini-1.5-flash-latest';
+    // WARNING: Your API key is exposed here. Move this to a backend server for security.
+    const apiKey = 'AIzaSyDO65JAzRl0aEry-7ftU85nzaqt0EtMw7c';
+    const model = 'gemini-1.5-flash-latest'; // Using a consistent, recent model
 
-    if (!apiKey) {
-      throw new Error(
-        'API key tidak ditemukan. Pastikan file config.js sudah dibuat dan berisi API key yang valid.',
-      );
-    }
+    // Get API key from configuration
+    // const apiKey = window.APP_CONFIG?.GEMINI_API_KEY;
+    // const model = window.APP_CONFIG?.GEMINI_MODEL || 'gemini-1.5-flash-latest';
+
+    // if (!apiKey) {
+    //   throw new Error(
+    //     'API key tidak ditemukan. Pastikan file config.js sudah dibuat dan berisi API key yang valid.',
+    //   );
+    // }
 
     const parts = [{ text: instruction }];
     if (imageData) {
